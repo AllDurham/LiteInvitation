@@ -1,0 +1,10 @@
+name: LiteInvitation
+version: '${project.version}'
+main: durham.plugin.invitation.InvitationMain
+authors: [ Durham ]
+softdepend: [PlaceholderAPI]
+commands:
+  LiteInvitation:
+    description: ""
+    aliases: [yq]
+    usage: /LiteInvitation help
