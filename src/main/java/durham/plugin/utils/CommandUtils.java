@@ -7,13 +7,14 @@ import durham.plugin.mysql.MySQLChecker;
 import durham.plugin.mysql.MySQLTaker;
 import durham.plugin.mysql.MySQLUpdater;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class CommandUtils {
@@ -94,6 +95,8 @@ public class CommandUtils {
                         .replace("%inviter%",inviterName)
                         .replace("%inviter_code%",code));
             }
+            inviterOnlineMessage(inviterName,message,code,frequency,p.getName());
+            frequencyCommand(inviterName,frequency);
         }
         else{
             YamlConfiguration playerData = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
@@ -136,15 +139,17 @@ public class CommandUtils {
                         .replace("%inviter%",inviterName)
                         .replace("%inviter_code%",code));
             }
+            inviterOnlineMessage(inviterName,message,code,frequency,p.getName());
+            frequencyCommand(inviterName,frequency);
         }
     }
-    public void onCheckCommand(Player p,String checkName) throws SQLException {
+    public void onCheckCommand(CommandSender sender, String checkName) throws SQLException {
         YamlConfiguration message = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
         List<String> dataMessage = message.getStringList("PlayerCheck");
         if (InvitationMain.mySQL){
             MySQLChecker mySQLChecker = new MySQLChecker();
             if (!mySQLChecker.ifContainsPlayerName(checkName)){
-                p.sendMessage(InvitationMain.prefix+message.getString("NotPlayer").replace("&","§"));
+                sender.sendMessage(InvitationMain.prefix+message.getString("NotPlayer").replace("&","§"));
                 return;
             }
             MySQLTaker mySQLTaker = new MySQLTaker();
@@ -153,7 +158,7 @@ public class CommandUtils {
             String inviter = mySQLTaker.getInviter(uuid);
             int frequency = mySQLTaker.getFrequency(uuid);
             for (String s : dataMessage) {
-                p.sendMessage(s.replace("&", "§")
+                sender.sendMessage(s.replace("&", "§")
                         .replace("%prefix%", InvitationMain.prefix)
                         .replace("%player%",checkName)
                         .replace("%code%",code)
@@ -164,7 +169,7 @@ public class CommandUtils {
         else{
             YamlConfiguration playerData = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
             if (!playerData.contains(checkName)){
-                p.sendMessage(InvitationMain.prefix+message.getString("NotPlayer").replace("&","§"));
+                sender.sendMessage(InvitationMain.prefix+message.getString("NotPlayer").replace("&","§"));
                 return;
             }
             DataTaker dataTaker = new DataTaker();
@@ -172,7 +177,7 @@ public class CommandUtils {
             String inviter = dataTaker.getInviter(checkName);
             int frequency = dataTaker.getFrequency(checkName);
             for (String s : dataMessage) {
-                p.sendMessage(s.replace("&", "§")
+                sender.sendMessage(s.replace("&", "§")
                         .replace("%prefix%", InvitationMain.prefix)
                         .replace("%player%",checkName)
                         .replace("%code%",code)
@@ -181,12 +186,12 @@ public class CommandUtils {
             }
         }
     }
-    public void onClearCommand(Player p,String clearName) throws IOException, SQLException {
+    public void onClearCommand(CommandSender sender,String clearName) throws IOException, SQLException {
         YamlConfiguration message = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
         if (InvitationMain.mySQL){
             MySQLChecker mySQLChecker = new MySQLChecker();
             if (!mySQLChecker.ifContainsPlayerName(clearName)){
-                p.sendMessage(InvitationMain.prefix+message.getString("NotPlayer").replace("&","§"));
+                sender.sendMessage(InvitationMain.prefix+message.getString("NotPlayer").replace("&","§"));
                 return;
             }
             MySQLUpdater mySQLUpdater = new MySQLUpdater();
@@ -195,12 +200,39 @@ public class CommandUtils {
         else{
             YamlConfiguration playerData = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
             if (!playerData.contains(clearName)){
-                p.sendMessage(InvitationMain.prefix+message.getString("NotPlayer").replace("&","§"));
+                sender.sendMessage(InvitationMain.prefix+message.getString("NotPlayer").replace("&","§"));
                 return;
             }
             DataUpdater dataUpdater = new DataUpdater();
             dataUpdater.resetPlayerData(clearName);
         }
-        p.sendMessage(InvitationMain.prefix+message.getString("clearPlayer").replace("&","§").replace("%player%",clearName));
+        sender.sendMessage(InvitationMain.prefix+message.getString("clearPlayer").replace("&","§").replace("%player%",clearName));
+    }
+    public void frequencyCommand(String inviter,int frequency){
+        Set<String> set = InvitationMain.pl.getConfig().getConfigurationSection("Frequency-Command").getKeys(false);
+        if (set.contains(String.valueOf(frequency))){
+            List<String> list = InvitationMain.pl.getConfig().getStringList("Frequency-Command."+frequency);
+            for (String s : list){
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), s
+                        .replace("&", "§")
+                        .replace("%player%",inviter)
+                        .replace("%prefix%",InvitationMain.prefix)
+                        .replace("%inviter_frequency%",String.valueOf(frequency)));
+            }
+        }
+    }
+    public void inviterOnlineMessage(String inviterName,YamlConfiguration message,String inviterCode,int frequency,String playerName){
+        if (Bukkit.getPlayer(inviterName)!=null){
+            List<String> inviterMessage = message.getStringList("InviterWasOnline");
+            Player p = Bukkit.getPlayer(inviterName);
+            for (String s : inviterMessage) {
+                p.sendMessage(s.replace("&", "§")
+                        .replace("%prefix%", InvitationMain.prefix)
+                        .replace("%inviter%",inviterName)
+                        .replace("%code%",inviterCode)
+                        .replace("%amount%",String.valueOf(frequency))
+                        .replace("%player%",playerName));
+            }
+        }
     }
 }

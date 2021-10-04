@@ -9,8 +9,11 @@
 #|                       Author-Durham QQ:1664828807                              |
 #|--------------------------------------------------------------------------------|
 
-#插件config版本
-version: 1.0
+#插件config版本 请勿修改！！！
+version: 1.1
+
+#插件所有信息的前缀
+prefix: '&8[&aLiteInvitation&8] '
 
 #邀请码长度
 CodeLength: 8
@@ -36,10 +39,30 @@ mysql:
 #  邀请者--%inviter% 被邀请者--%player%
 #  插件前缀--%prefix% 邀请者累计邀请人数--%inviter_frequency%
 #  注: 当邀请事件发生时 邀请者不一定在线
-#    不可使用一些如在线指令如: tp、tphere等
+#    不可对邀请者使用一些如在线指令如: tp、tphere等
 #    指令执行者为后台执行
 Invite-Command:
   - 'tell %player% %prefix%&e是%inviter%邀请了你哦！！'
   - 'tell %player% %prefix%&e他已经邀请了%inviter_frequency%人了！'
   - 'tell %player% %prefix%&a所以我奖励你一堆泥土！！ awa'
+  - 'money give %inviter% 50'
   - 'give %player% minecraft:dirt 64'
+
+#当一个玩家邀请人数达到一定值时所执行的命令
+#(此为额外指令) 即上方Invite-Command项会与此项共同执行
+#该项可随意修改 如,
+#Frequency-Command:
+#  2:
+#    - 'money give %player% 50'
+#  4:
+#    - 'money give %player% 300'
+#  插件前缀--%prefix% 触发事件的玩家--%player%
+#  邀请者累计邀请人数--%inviter_frequency%
+#  注: 当邀请事件发生时 邀请者不一定在线
+#    不可对邀请者使用一些如在线指令如: tell、tp、tphere等
+#    指令执行者为后台执行
+Frequency-Command:
+  3:
+    - 'money give %player% 100'
+  5:
+    - 'money give %player% 500'

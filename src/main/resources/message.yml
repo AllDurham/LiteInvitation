@@ -11,11 +11,9 @@
 
 #message.yml 文件编辑后无需重载 即时加载
 
-#message文件版本
-version: 1.5
+#message文件版本 请勿修改！！！
+version: 1.6
 
-#插件所有信息的前缀
-prefix: '&8[&aLiteInvitation&8] '
 
 #当玩家连接服务器后生成邀请码后的系统提示信息
 # 玩家ID-%player% 邀请码-%code%
@@ -32,6 +30,7 @@ Help:
   - '&8|  &e“/LiteInvitation Look”&b--查看自己的邀请数据'
   - '&8|  &e“/LiteInvitation Accept <Code>”&b--填写其他玩家的邀请码'
   - '&8|&7--&cAdmin:'
+  - '&8|  &e“/LiteInvitation reload”&b--重载插件config配置文件'
   - '&8|  &e“/LiteInvitation Check <Player>”&b--查看指定玩家的邀请数据'
   - '&8|  &e“/LiteInvitation Clear <Player>”&b--清除指定玩家的邀请数据'
   - '&8|&7----------------------------------------------------------&8|'
@@ -107,3 +106,22 @@ clearPlayer: "&a成功清理了%player%的游戏数据"
 
 #当玩家尝试被重复邀请时
 alreadyInvite: "&c你已经被邀请过了！"
+
+#成功重载的插件提示
+SuccessReload: "&a成功重载了插件配置！"
+
+#当一个邀请事件发生时
+#若邀请者在线 则向邀请者发送信息内容
+#  插件前缀--%prefix% 邀请者--%inviter%
+#  邀请者的邀请码--%code% 邀请者邀请玩家次数%code%
+#  谁接受了邀请者的邀请--%player%
+InviterWasOnline:
+  - '&8|&7----------------------------------------------------------&8|'
+  - '&8|                  %prefix% &a有人接受了你的邀请！'
+  - '&8|'
+  - '&8|&7--&b%inviter%:'
+  - '&8|  &e”你的邀请码“&b--%code%'
+  - '&8|  &e“你累计邀请了”&b--%amount%人'
+  - '&8|  &e“接受了你的邀请”&b--%player%'
+  - '&8|'
+  - '&8|&7----------------------------------------------------------&8|'

@@ -32,6 +32,47 @@ public class BasicCommand implements CommandExecutor {
                 }
                 return true;
             }
+            if (args[0].equalsIgnoreCase("reload")){
+                sender.sendMessage(InvitationMain.prefix+message.getString("SuccessReload").replace("&","§"));
+                InvitationMain.pl.reloadConfig();
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("Check")){
+                if (!sender.hasPermission("LiteInvitation.Admin")){
+                    sender.sendMessage(InvitationMain.prefix+message.getString("PermissionError").replace("&","§"));
+                    return true;
+                }
+                if (args.length != 2){
+                    sender.sendMessage(InvitationMain.prefix+message.getString("CommandError").replace("&","§"));
+                    return true;
+                }
+                String inputName = args[1];
+                CommandUtils commandUtils = new CommandUtils();
+                try {
+                    commandUtils.onCheckCommand(sender,inputName);
+                } catch (SQLException e) {
+                    sender.sendMessage(InvitationMain.prefix+message.getString("UnknownError").replace("&","§"));
+                }
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("Clear")){
+                if (!sender.hasPermission("LiteInvitation.Admin")){
+                    sender.sendMessage(InvitationMain.prefix+message.getString("PermissionError").replace("&","§"));
+                    return true;
+                }
+                if (args.length != 2){
+                    sender.sendMessage(InvitationMain.prefix+message.getString("CommandError").replace("&","§"));
+                    return true;
+                }
+                String inputName = args[1];
+                CommandUtils commandUtils = new CommandUtils();
+                try {
+                    commandUtils.onClearCommand(sender,inputName);
+                } catch (IOException | SQLException e) {
+                    sender.sendMessage(InvitationMain.prefix+message.getString("UnknownError").replace("&","§"));
+                }
+                return true;
+            }
             if (sender instanceof ConsoleCommandSender){
                 sender.sendMessage(InvitationMain.prefix+message.getString("ConsoleError").replace("&","§"));
                 return true;
@@ -54,42 +95,6 @@ public class BasicCommand implements CommandExecutor {
                 CommandUtils commandUtils = new CommandUtils();
                 try {
                     commandUtils.onAcceptCommand((Player)sender,inputCode);
-                } catch (IOException | SQLException e) {
-                    sender.sendMessage(InvitationMain.prefix+message.getString("UnknownError").replace("&","§"));
-                }
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("Check")){
-                if (!sender.hasPermission("LiteInvitation.Admin")){
-                    sender.sendMessage(InvitationMain.prefix+message.getString("PermissionError").replace("&","§"));
-                    return true;
-                }
-                if (args.length != 2){
-                    sender.sendMessage(InvitationMain.prefix+message.getString("CommandError").replace("&","§"));
-                    return true;
-                }
-                String inputName = args[1];
-                CommandUtils commandUtils = new CommandUtils();
-                try {
-                    commandUtils.onCheckCommand((Player)sender,inputName);
-                } catch (SQLException e) {
-                    sender.sendMessage(InvitationMain.prefix+message.getString("UnknownError").replace("&","§"));
-                }
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("Clear")){
-                if (!sender.hasPermission("LiteInvitation.Admin")){
-                    sender.sendMessage(InvitationMain.prefix+message.getString("PermissionError").replace("&","§"));
-                    return true;
-                }
-                if (args.length != 2){
-                    sender.sendMessage(InvitationMain.prefix+message.getString("CommandError").replace("&","§"));
-                    return true;
-                }
-                String inputName = args[1];
-                CommandUtils commandUtils = new CommandUtils();
-                try {
-                    commandUtils.onClearCommand((Player)sender,inputName);
                 } catch (IOException | SQLException e) {
                     sender.sendMessage(InvitationMain.prefix+message.getString("UnknownError").replace("&","§"));
                 }

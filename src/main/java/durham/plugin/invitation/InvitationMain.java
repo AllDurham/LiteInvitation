@@ -4,22 +4,25 @@ import durham.plugin.commands.BasicCommand;
 import durham.plugin.hook.PAPIHook;
 import durham.plugin.listener.JoinListener;
 import durham.plugin.mysql.MySQLConnection;
+import durham.plugin.updater.ConfigurationUpdater;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.io.File;
+
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class InvitationMain extends JavaPlugin{
     private String version;
-    public static boolean loadPAPI;
+    private String configVersion;
     public static String prefix;
     public static InvitationMain pl;
     public static boolean mySQL;
     @Override
     public void onEnable() {
+        try {new ConfigurationUpdater().checkConfigUpdate();} catch (IOException e)
+        {e.printStackTrace();getServer().getConsoleSender().sendMessage(prefix+"§c配置文件更新时发生了未知错误！");}
         Bukkit.getPluginCommand("LiteInvitation").setExecutor(new BasicCommand());
         Bukkit.getPluginManager().registerEvents(new JoinListener(),this);
         ConsoleCommandSender c = getServer().getConsoleSender();
@@ -80,8 +83,8 @@ public class InvitationMain extends JavaPlugin{
                 "                                                                 ");
         mySQL = getConfig().getBoolean("mysql.enable",false);
         pl = this;
-        version = "1.2-SNAPSHOT";
-        prefix = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "message.yml")).getString("prefix","&8[&aInvitation&8]").replace("&","§");
+        version = "1.3-SNAPSHOT";
+        prefix = getConfig().getString("prefix").replace("&","§");
     }
     public String getVersion(){
         return version;
