@@ -15,7 +15,6 @@ import java.sql.SQLException;
 
 public class InvitationMain extends JavaPlugin{
     private String version;
-    private String configVersion;
     public static String prefix;
     public static InvitationMain pl;
     public static boolean mySQL;
