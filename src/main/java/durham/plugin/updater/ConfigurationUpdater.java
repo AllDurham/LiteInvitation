@@ -11,12 +11,16 @@ import java.util.List;
 
 public class ConfigurationUpdater {
     public void checkConfigUpdate() throws IOException {
+        YamlConfiguration message = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
         if (InvitationMain.pl.getConfig().getDouble("version")==1.0){
             configUpdate1();
-            return;
         }
-        Bukkit.getServer().getConsoleSender().sendMessage
-                (InvitationMain.prefix+"§a您的配置文件当前是最新版本哦！");
+        if (message.getDouble("version")==1.6){
+            messageUpdate1();
+        }
+        if (InvitationMain.pl.getConfig().getDouble("version")==1.1){
+            configUpdate3();
+        }
     }
     public void configUpdate1() throws IOException {
         YamlConfiguration message = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
@@ -47,6 +51,21 @@ public class ConfigurationUpdater {
         message.set("SuccessReload","&a成功重载了插件配置！");
         message.set("InviterWasOnline",set3);
         message.save(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
+        InvitationMain.pl.saveConfig();
+    }
+    public void messageUpdate1() throws IOException {
+        YamlConfiguration message = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
+        Bukkit.getServer().getConsoleSender().sendMessage
+                ("\n"+InvitationMain.prefix+"§b系统检测出你当前的信息文件配置版本已过时\n"+InvitationMain.prefix+"§a正在自动为您更新配置中！");
+        message.set("version",1.7);
+        message.set("alreadySameIP","&c请不要使用小号哦！这个IP已经接受过邀请了");
+        message.save(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
+    }
+    public void configUpdate3(){
+        Bukkit.getServer().getConsoleSender().sendMessage
+                ("\n"+InvitationMain.prefix+"§b系统检测出你当前的插件配置版本已过时\n"+InvitationMain.prefix+"§a正在自动为您更新配置中！");
+        InvitationMain.pl.getConfig().set("version",1.2);
+        InvitationMain.pl.getConfig().set("Anti-SmallAccount",true);
         InvitationMain.pl.saveConfig();
     }
 }

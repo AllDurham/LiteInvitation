@@ -58,6 +58,7 @@ public class CommandUtils {
             MySQLChecker mySQLChecker = new MySQLChecker();
             MySQLTaker mySQLTaker = new MySQLTaker();
             MySQLUpdater mySQLUpdater = new MySQLUpdater();
+            String status = mySQLTaker.getStatus(p.getAddress().getHostName());
             if (!mySQLTaker.getInviter(p.getUniqueId()).equals("无")){
                 p.sendMessage(InvitationMain.prefix+message.getString("alreadyInvite")
                         .replace("&","§"));
@@ -72,6 +73,13 @@ public class CommandUtils {
             if (mySQLTaker.getName(code).equals(p.getName())){
                 p.sendMessage(InvitationMain.prefix+message.getString("InviteSelf").replace("&","§"));
                 return;
+            }
+            if (InvitationMain.pl.getConfig().getBoolean("Anti-SmallAccount")){
+                if (status.equalsIgnoreCase("true")){
+                    p.sendMessage(InvitationMain.prefix+message.getString("alreadySameIP")
+                            .replace("&","§"));
+                    return;
+                }
             }
             String inviterName = mySQLTaker.getName(code);
             String uuid = mySQLTaker.getUUID(code);
@@ -95,12 +103,14 @@ public class CommandUtils {
                         .replace("%inviter%",inviterName)
                         .replace("%inviter_code%",code));
             }
+            mySQLUpdater.setStatus(p.getAddress().getHostName(),true);
             inviterOnlineMessage(inviterName,message,code,frequency,p.getName());
             frequencyCommand(inviterName,frequency);
         }
         else{
             YamlConfiguration playerData = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
             YamlConfiguration allCodes = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "AllCodes.yml"));
+            boolean status = new DataTaker().getStatus(p.getAddress().getHostName());
             if (!playerData.getString(p.getName()+".inviter").equals("无")){
                 p.sendMessage(InvitationMain.prefix+message.getString("alreadyInvite")
                         .replace("&","§"));
@@ -115,6 +125,13 @@ public class CommandUtils {
             if (allCodes.getString("CodeList."+code).equals(p.getName())){
                 p.sendMessage(InvitationMain.prefix+message.getString("InviteSelf").replace("&","§"));
                 return;
+            }
+            if (InvitationMain.pl.getConfig().getBoolean("Anti-SmallAccount")){
+                if (status){
+                    p.sendMessage(InvitationMain.prefix+message.getString("alreadySameIP")
+                            .replace("&","§"));
+                    return;
+                }
             }
             String inviterName = allCodes.getString("CodeList."+code);
             DataUpdater dataUpdater = new DataUpdater();
@@ -139,6 +156,7 @@ public class CommandUtils {
                         .replace("%inviter%",inviterName)
                         .replace("%inviter_code%",code));
             }
+            dataUpdater.setStatus(p.getAddress().getHostName(),true);
             inviterOnlineMessage(inviterName,message,code,frequency,p.getName());
             frequencyCommand(inviterName,frequency);
         }

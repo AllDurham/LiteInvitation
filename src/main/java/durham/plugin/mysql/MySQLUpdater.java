@@ -1,8 +1,5 @@
 package durham.plugin.mysql;
 
-import durham.plugin.invitation.InvitationMain;
-import org.bukkit.Bukkit;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -14,15 +11,9 @@ public class MySQLUpdater {
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = mySQLConnection.getTable();
         String sql=String.format("INSERT INTO %s_playerdata(`uuid`, `name`, `frequency`, `code`, `inviter`) VALUES('%s', '%s', '%s', '%s', '无')",tablePrefix,uuid,name,0,code);
-        if (conn==null){
-            Bukkit.getServer().getConsoleSender().sendMessage(InvitationMain.prefix+"§cNull:创建失败新玩家数据！！无法连接到数据库");
-            Bukkit.getServer().getConsoleSender().sendMessage(InvitationMain.prefix+"§cSQL:§a"+sql);
-        }
-        else{
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.execute();
-            ps.close();
-        }
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.execute();
+        ps.close();
     }
     public void addFrequency(UUID uuid, int frequency) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
@@ -40,6 +31,24 @@ public class MySQLUpdater {
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = mySQLConnection.getTable();
         String sql = String.format("UPDATE %s_playerdata SET inviter='%s' WHERE uuid='%s';",tablePrefix,inviterName,uuid);
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.execute();
+        ps.close();
+    }
+    public void newIPData(String ip) throws SQLException {
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        Connection conn = mySQLConnection.getConn();
+        String tablePrefix = mySQLConnection.getTable();
+        String sql=String.format("INSERT INTO %s_ipdata(`status`,`ip`) VALUES('false', '%s')",tablePrefix,ip.replace(".","-"));
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.execute();
+        ps.close();
+    }
+    public void setStatus(String ip,boolean status) throws SQLException {
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        Connection conn = mySQLConnection.getConn();
+        String tablePrefix = mySQLConnection.getTable();
+        String sql = String.format("UPDATE %s_ipdata SET status='%s' WHERE ip='%s';",tablePrefix,status,ip.replace(".","-"));
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.execute();
         ps.close();

@@ -82,7 +82,7 @@ public class InvitationMain extends JavaPlugin{
                 "                                                                 ");
         mySQL = getConfig().getBoolean("mysql.enable",false);
         pl = this;
-        version = "1.3-SNAPSHOT";
+        version = "1.4-SNAPSHOT";
         prefix = getConfig().getString("prefix").replace("&","§");
     }
     public String getVersion(){
@@ -98,6 +98,9 @@ public class InvitationMain extends JavaPlugin{
             getServer().getConsoleSender().sendMessage(prefix+"§f正在使用yaml进行文件存储");
             saveResource("PlayerData.yml",false);
             saveResource("AllCodes.yml",false);
+            if (getConfig().getBoolean("Anti-SmallAccount")){
+                saveResource("IPList.yml",false);
+            }
         }
     }
     private void loadPAPI(ConsoleCommandSender c){

@@ -106,4 +106,18 @@ public class MySQLTaker {
         rs.close();
         return Frequency;
     }
+    public String getStatus(String ip) throws SQLException {
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        Connection conn = mySQLConnection.getConn();
+        String tablePrefix = mySQLConnection.getTable();
+        String sql=String.format("SELECT * FROM `%s_ipdata` WHERE `ip` = '%s'",tablePrefix, ip.replace(".","-"));
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        String status = "未知错误";
+        if(rs.next()) {
+            status = rs.getString("status");}
+        ps.close();
+        rs.close();
+        return status;
+    }
 }

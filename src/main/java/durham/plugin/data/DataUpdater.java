@@ -21,6 +21,11 @@ public class DataUpdater {
         allCodes.save(new File(InvitationMain.pl.getDataFolder(), "AllCodes.yml"));
         playerData.save(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
     }
+    public void newIPData(String ip) throws IOException {
+        YamlConfiguration ipList = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "IPList.yml"));
+        ipList.set(ip.replace(".","-"),false);
+        ipList.save(new File(InvitationMain.pl.getDataFolder(), "IPList.yml"));
+    }
     public void addFrequency(String playerName,int frequency) throws IOException {
         YamlConfiguration playerData = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
         DataTaker dataTaker = new DataTaker();
@@ -32,6 +37,11 @@ public class DataUpdater {
         YamlConfiguration playerData = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
         playerData.set(playerName+".inviter",inviterName);
         playerData.save(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
+    }
+    public void setStatus(String ip,boolean status) throws IOException {
+        YamlConfiguration ipList = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "IPList.yml"));
+        ipList.set(ip.replace(".","-"),status);
+        ipList.save(new File(InvitationMain.pl.getDataFolder(), "IPList.yml"));
     }
     public void resetPlayerData(String clearName) throws IOException {
         YamlConfiguration playerData = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));

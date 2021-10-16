@@ -18,4 +18,8 @@ public class DataTaker {
         YamlConfiguration playerData = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
         return playerData.getString(name+".inviter");
     }
+    public boolean getStatus(String ip) {
+        YamlConfiguration ipList = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "IPList.yml"));
+        return ipList.getBoolean(ip.replace(".","-"));
+    }
 }

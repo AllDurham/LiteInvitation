@@ -3,9 +3,9 @@ package durham.plugin.mysql;
 import durham.plugin.invitation.InvitationMain;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class MySQLConnection {
@@ -44,9 +44,12 @@ public class MySQLConnection {
         return true;
     }
     private void createTable() throws SQLException {
-        PreparedStatement ps = conn.prepareStatement(
-                "CREATE TABLE IF NOT EXISTS "+tablePrefix+"_playerdata(uuid varchar(36) NOT NULL,name varchar(32) NOT NULL,frequency integer NOT NULL,code varchar(20) NOT NULL,inviter varchar(32) NOT NULL)");
-        ps.execute();
+        conn.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS "+tablePrefix+"_playerdata" +
+                        "(uuid varchar(36) NOT NULL,name varchar(64) NOT NULL,frequency integer NOT NULL,code varchar(20) NOT NULL,inviter varchar(32) NOT NULL)").execute();
+        conn.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS "+tablePrefix+"_ipdata" +
+                        "(status varchar(4) NOT NULL,ip varchar(32) NOT NULL)").execute();
     }
     public Connection getConn(){
         return conn;

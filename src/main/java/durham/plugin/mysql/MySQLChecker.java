@@ -34,4 +34,13 @@ public class MySQLChecker {
         ResultSet rs = ps.executeQuery();
         return rs.next();
     }
+    public boolean ifContainsIP(String ip) throws SQLException {
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        Connection conn = mySQLConnection.getConn();
+        String tablePrefix = mySQLConnection.getTable();
+        String sql=String.format("SELECT * FROM `%s_ipdata` WHERE `ip` = '%s'",tablePrefix,ip.replace(".","-"));
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        return rs.next();
+    }
 }
