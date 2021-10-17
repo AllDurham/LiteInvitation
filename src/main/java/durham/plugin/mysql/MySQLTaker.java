@@ -11,7 +11,7 @@ public class MySQLTaker {
     public int getFrequency(UUID uuid) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
-        String tablePrefix = mySQLConnection.getTable();
+        String tablePrefix = MySQLConnection.tablePrefix;
         String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `uuid` = '%s'",tablePrefix,uuid);
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -25,7 +25,7 @@ public class MySQLTaker {
     public String getCode(UUID uuid) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
-        String tablePrefix = mySQLConnection.getTable();
+        String tablePrefix = MySQLConnection.tablePrefix;
         String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `uuid` = '%s'",tablePrefix,uuid);
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -39,7 +39,7 @@ public class MySQLTaker {
     public String getInviter(UUID uuid) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
-        String tablePrefix = mySQLConnection.getTable();
+        String tablePrefix = MySQLConnection.tablePrefix;
         String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `uuid` = '%s'",tablePrefix,uuid);
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -53,7 +53,7 @@ public class MySQLTaker {
     public String getName(String code) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
-        String tablePrefix = mySQLConnection.getTable();
+        String tablePrefix = MySQLConnection.tablePrefix;
         String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `code` = '%s'",tablePrefix,code);
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -67,7 +67,7 @@ public class MySQLTaker {
     public String getUUID(String code) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
-        String tablePrefix = mySQLConnection.getTable();
+        String tablePrefix = MySQLConnection.tablePrefix;
         String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `code` = '%s'",tablePrefix,code);
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -81,7 +81,7 @@ public class MySQLTaker {
     public String getNameUUID(String name) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
-        String tablePrefix = mySQLConnection.getTable();
+        String tablePrefix = MySQLConnection.tablePrefix;
         String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `name` = '%s'",tablePrefix,name);
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -95,7 +95,7 @@ public class MySQLTaker {
     public int getNameFrequency(String name) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
-        String tablePrefix = mySQLConnection.getTable();
+        String tablePrefix = MySQLConnection.tablePrefix;
         String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `name` = '%s'",tablePrefix,name);
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -109,7 +109,7 @@ public class MySQLTaker {
     public String getStatus(String ip) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
-        String tablePrefix = mySQLConnection.getTable();
+        String tablePrefix = MySQLConnection.tablePrefix;
         String sql=String.format("SELECT * FROM `%s_ipdata` WHERE `ip` = '%s'",tablePrefix, ip.replace(".","-"));
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();

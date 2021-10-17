@@ -10,7 +10,7 @@ public class MySQLChecker {
     public boolean ifContainsCode(String code) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
-        String tablePrefix = mySQLConnection.getTable();
+        String tablePrefix = MySQLConnection.tablePrefix;
         String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `code` = '%s'",tablePrefix,code);
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -19,7 +19,7 @@ public class MySQLChecker {
     public boolean ifContainsUUID(UUID uuid) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
-        String tablePrefix = mySQLConnection.getTable();
+        String tablePrefix = MySQLConnection.tablePrefix;
         String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `uuid` = '%s'",tablePrefix,uuid);
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -28,7 +28,7 @@ public class MySQLChecker {
     public boolean ifContainsPlayerName(String checkName) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
-        String tablePrefix = mySQLConnection.getTable();
+        String tablePrefix = MySQLConnection.tablePrefix;
         String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `name` = '%s'",tablePrefix,checkName);
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -37,7 +37,7 @@ public class MySQLChecker {
     public boolean ifContainsIP(String ip) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
-        String tablePrefix = mySQLConnection.getTable();
+        String tablePrefix = MySQLConnection.tablePrefix;
         String sql=String.format("SELECT * FROM `%s_ipdata` WHERE `ip` = '%s'",tablePrefix,ip.replace(".","-"));
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();

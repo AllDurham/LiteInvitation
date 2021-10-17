@@ -3,7 +3,7 @@ package durham.plugin.invitation;
 import durham.plugin.commands.BasicCommand;
 import durham.plugin.hook.PAPIHook;
 import durham.plugin.listener.JoinListener;
-import durham.plugin.mysql.MySQLConnection;
+import durham.plugin.mysql.MySQLHelper;
 import durham.plugin.updater.ConfigurationUpdater;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -82,7 +82,7 @@ public class InvitationMain extends JavaPlugin{
                 "                                                                 ");
         mySQL = getConfig().getBoolean("mysql.enable",false);
         pl = this;
-        version = "1.4-SNAPSHOT";
+        version = "1.4.1-SNAPSHOT";
         prefix = getConfig().getString("prefix").replace("&","§");
     }
     public String getVersion(){
@@ -91,8 +91,7 @@ public class InvitationMain extends JavaPlugin{
     private void loadMySQL() throws SQLException {
         if (mySQL){
             getServer().getConsoleSender().sendMessage(prefix+"§f尝试访问数据库");
-            MySQLConnection mySQLConnection = new MySQLConnection();
-            mySQLConnection.createMySQL();
+            MySQLHelper.MySQLInstalled();
         }
         else{
             getServer().getConsoleSender().sendMessage(prefix+"§f正在使用yaml进行文件存储");
