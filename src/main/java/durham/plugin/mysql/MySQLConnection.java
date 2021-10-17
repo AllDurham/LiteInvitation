@@ -49,7 +49,7 @@ public class MySQLConnection {
                         "(uuid varchar(36) NOT NULL,name varchar(64) NOT NULL,frequency integer NOT NULL,code varchar(20) NOT NULL,inviter varchar(32) NOT NULL)").execute();
         conn.prepareStatement(
                 "CREATE TABLE IF NOT EXISTS "+tablePrefix+"_ipdata" +
-                        "(status varchar(4) NOT NULL,ip varchar(32) NOT NULL)").execute();
+                        "(status varchar(12) NOT NULL,ip varchar(32) NOT NULL)").execute();
     }
     public Connection getConn(){
         return conn;
