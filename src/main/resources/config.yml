@@ -10,7 +10,7 @@
 #|--------------------------------------------------------------------------------|
 
 #插件config版本 请勿修改！！！
-version: 1.2
+version: 1.3
 
 #插件所有信息的前缀
 prefix: '&8[&aLiteInvitation&8] '
@@ -18,9 +18,26 @@ prefix: '&8[&aLiteInvitation&8] '
 #邀请码长度
 CodeLength: 8
 
-#是否启用防小号
-#开启后来自将限制一个IP只能接受一次邀请！
-Anti-SmallAccount: true
+#防小号功能
+Anti-SmallAccount:
+  IP:
+    #是否启用IP防小号限制 开启后单个IP只能接受一次邀请
+    Enable: true
+  Time:
+    #是否开启游戏时间防小号限制
+    Enable: true
+    #当玩家至少需要游戏多久才能接受邀请 单位:小时
+    Amount: 24
+  Kills:
+    #是否开启击杀次数防小号限制
+    Enable: true
+    #玩家需要击杀多少次生物才能接受邀请
+    Amount: 50
+  Level:
+    #是否开启挖掘方块防小号限制
+    Enable: true
+    #玩家至少需要多少级才能接受邀请
+    Amount: 20
 
 mysql:
   #是否开启mysql数据库存储

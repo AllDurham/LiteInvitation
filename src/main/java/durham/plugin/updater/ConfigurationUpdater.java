@@ -18,7 +18,13 @@ public class ConfigurationUpdater {
         if (message.getDouble("version")==1.6){
             messageUpdate1();
         }
+        if (message.getDouble("version")==1.7){
+            messageUpdate2();
+        }
         if (InvitationMain.pl.getConfig().getDouble("version")==1.1){
+            configUpdate2();
+        }
+        if (InvitationMain.pl.getConfig().getDouble("version")==1.2){
             configUpdate3();
         }
     }
@@ -61,11 +67,35 @@ public class ConfigurationUpdater {
         message.set("alreadySameIP","&c请不要使用小号哦！这个IP已经接受过邀请了");
         message.save(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
     }
-    public void configUpdate3(){
+    public void messageUpdate2() throws IOException {
+        YamlConfiguration message = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
+        Bukkit.getServer().getConsoleSender().sendMessage
+                ("\n"+InvitationMain.prefix+"§b系统检测出你当前的信息文件配置版本已过时\n"+InvitationMain.prefix+"§a正在自动为您更新配置中！");
+        message.set("version",1.8);
+        message.set("TimeNotEnough","&c接受邀请失败，§a您需要累计在线时间: %time%小时才能接受邀请！");
+        message.set("KillsNotEnough","&c接受邀请失败，§a您需要累计击杀: %kills%次生物才能接受邀请！");
+        message.set("LevelNotEnough","&c接受邀请失败，§a您需要达到等级: %level%级才能接受邀请！");
+        message.save(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
+    }
+    public void configUpdate2(){
         Bukkit.getServer().getConsoleSender().sendMessage
                 ("\n"+InvitationMain.prefix+"§b系统检测出你当前的插件配置版本已过时\n"+InvitationMain.prefix+"§a正在自动为您更新配置中！");
         InvitationMain.pl.getConfig().set("version",1.2);
         InvitationMain.pl.getConfig().set("Anti-SmallAccount",true);
+        InvitationMain.pl.saveConfig();
+    }
+    public void configUpdate3(){
+        Bukkit.getServer().getConsoleSender().sendMessage
+                ("\n"+InvitationMain.prefix+"§b系统检测出你当前的插件配置版本已过时\n"+InvitationMain.prefix+"§a正在自动为您更新配置中！");
+        InvitationMain.pl.getConfig().set("version",1.3);
+        InvitationMain.pl.getConfig().set("Anti-SmallAccount",null);
+        InvitationMain.pl.getConfig().set("Anti-SmallAccount.IP.Enable",true);
+        InvitationMain.pl.getConfig().set("Anti-SmallAccount.Time.Enable",true);
+        InvitationMain.pl.getConfig().set("Anti-SmallAccount.Time.Amount",24);
+        InvitationMain.pl.getConfig().set("Anti-SmallAccount.Kills.Enable",true);
+        InvitationMain.pl.getConfig().set("Anti-SmallAccount.Kills.Amount",50);
+        InvitationMain.pl.getConfig().set("Anti-SmallAccount.Level.Enable",true);
+        InvitationMain.pl.getConfig().set("Anti-SmallAccount.Level.Amount",20);
         InvitationMain.pl.saveConfig();
     }
 }

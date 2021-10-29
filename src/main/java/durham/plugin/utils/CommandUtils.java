@@ -7,6 +7,7 @@ import durham.plugin.mysql.MySQLChecker;
 import durham.plugin.mysql.MySQLTaker;
 import durham.plugin.mysql.MySQLUpdater;
 import org.bukkit.Bukkit;
+import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -58,7 +59,6 @@ public class CommandUtils {
             MySQLChecker mySQLChecker = new MySQLChecker();
             MySQLTaker mySQLTaker = new MySQLTaker();
             MySQLUpdater mySQLUpdater = new MySQLUpdater();
-            String status = mySQLTaker.getStatus(p.getAddress().getHostName());
             if (!mySQLTaker.getInviter(p.getUniqueId()).equals("无")){
                 p.sendMessage(InvitationMain.prefix+message.getString("alreadyInvite")
                         .replace("&","§"));
@@ -74,12 +74,8 @@ public class CommandUtils {
                 p.sendMessage(InvitationMain.prefix+message.getString("InviteSelf").replace("&","§"));
                 return;
             }
-            if (InvitationMain.pl.getConfig().getBoolean("Anti-SmallAccount")){
-                if (status.equalsIgnoreCase("true")){
-                    p.sendMessage(InvitationMain.prefix+message.getString("alreadySameIP")
-                            .replace("&","§"));
-                    return;
-                }
+            if (!p.hasPermission("LiteInvitation.Bypass")){
+                if (ConditionUtils.CheckCondition(p)) return;
             }
             String inviterName = mySQLTaker.getName(code);
             String uuid = mySQLTaker.getUUID(code);
@@ -110,7 +106,6 @@ public class CommandUtils {
         else{
             YamlConfiguration playerData = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
             YamlConfiguration allCodes = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "AllCodes.yml"));
-            boolean status = new DataTaker().getStatus(p.getAddress().getHostName());
             if (!playerData.getString(p.getName()+".inviter").equals("无")){
                 p.sendMessage(InvitationMain.prefix+message.getString("alreadyInvite")
                         .replace("&","§"));
@@ -126,13 +121,10 @@ public class CommandUtils {
                 p.sendMessage(InvitationMain.prefix+message.getString("InviteSelf").replace("&","§"));
                 return;
             }
-            if (InvitationMain.pl.getConfig().getBoolean("Anti-SmallAccount")){
-                if (status){
-                    p.sendMessage(InvitationMain.prefix+message.getString("alreadySameIP")
-                            .replace("&","§"));
-                    return;
-                }
+            if (!p.hasPermission("LiteInvitation.Bypass")){
+                if (ConditionUtils.CheckCondition(p)) return;
             }
+            Bukkit.getServer().getConsoleSender().sendMessage("调试:"+p.getStatistic(Statistic.PLAY_ONE_TICK));
             String inviterName = allCodes.getString("CodeList."+code);
             DataUpdater dataUpdater = new DataUpdater();
             DataTaker dataTaker = new DataTaker();
