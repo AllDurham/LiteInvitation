@@ -19,19 +19,14 @@ public class ConditionUtils {
                 time = statistic;
                 break;
             }
-            if (time==null){
-                Bukkit.getServer().getConsoleSender().sendMessage(InvitationMain.prefix+"§c枚举获取异常");
-            }
+        }
+        if (time==null){
+            Bukkit.getServer().getConsoleSender().sendMessage(InvitationMain.prefix+"§c枚举获取异常");
         }
     }
     public static boolean CheckCondition(Player p) throws SQLException,IllegalArgumentException{
         YamlConfiguration message = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
         FileConfiguration config = InvitationMain.pl.getConfig();
-        if (config.getBoolean("debug")){
-            System.out.print(time);
-            System.out.print(p.getStatistic(Statistic.KILL_ENTITY));
-            System.out.print(p.getLevel());
-        }
         if (InvitationMain.mySQL){
             if (config.getBoolean("Anti-SmallAccount.IP.Enable")){
                 MySQLTaker mySQLTaker = new MySQLTaker();
@@ -63,21 +58,6 @@ public class ConditionUtils {
                 return true;
             }
         }
-        if (config.getBoolean("Anti-SmallAccount.Kills.Enable")){
-            try {
-                if (p.getStatistic(Statistic.KILL_ENTITY)<config.getInt("Anti-SmallAccount.Kills.Amount")){
-                    p.sendMessage(InvitationMain.prefix+message.getString("KillsNotEnough")
-                            .replace("&","§").replace("%kills%",config.getString("Anti-SmallAccount.Kills.Amount")));
-                    return true;
-                }
-            }
-            catch (IllegalArgumentException e){
-                p.sendMessage(InvitationMain.prefix+message.getString("KillsNotEnough")
-                        .replace("&","§").replace("%kills%",config.getString("Anti-SmallAccount.Kills.Amount")));
-                return true;
-            }
-        }
-        p.sendMessage(String.valueOf(p.getLevel()));
         if (config.getBoolean("Anti-SmallAccount.Level.Enable")){
             if (p.getLevel()<config.getInt("Anti-SmallAccount.Level.Amount")){
                 p.sendMessage(InvitationMain.prefix+message.getString("LevelNotEnough")

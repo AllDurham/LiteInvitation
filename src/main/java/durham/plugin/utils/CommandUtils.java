@@ -7,7 +7,6 @@ import durham.plugin.mysql.MySQLChecker;
 import durham.plugin.mysql.MySQLTaker;
 import durham.plugin.mysql.MySQLUpdater;
 import org.bukkit.Bukkit;
-import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -59,7 +58,7 @@ public class CommandUtils {
             MySQLChecker mySQLChecker = new MySQLChecker();
             MySQLTaker mySQLTaker = new MySQLTaker();
             MySQLUpdater mySQLUpdater = new MySQLUpdater();
-            if (!mySQLTaker.getInviter(p.getUniqueId()).equals("none")){
+            if (!mySQLTaker.getInviter(p.getUniqueId()).equals("无")){
                 p.sendMessage(InvitationMain.prefix+message.getString("alreadyInvite")
                         .replace("&","§"));
                 return;
@@ -104,7 +103,6 @@ public class CommandUtils {
             frequencyCommand(inviterName,frequency);
         }
         else{
-            YamlConfiguration playerData = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
             YamlConfiguration allCodes = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "AllCodes.yml"));
             if (!new DataTaker().getInviter(p.getName()).equals("无")){
                 p.sendMessage(InvitationMain.prefix+message.getString("alreadyInvite")
