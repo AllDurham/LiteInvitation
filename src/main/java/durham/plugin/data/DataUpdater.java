@@ -17,7 +17,7 @@ public class DataUpdater {
         allCodes.set("CodeList."+code,p.getName());
         playerData.set(p.getName()+".frequency",0);
         playerData.set(p.getName()+".code",code);
-        playerData.set(p.getName()+".inviter","无");
+        playerData.set(p.getName()+".inviter","none");
         allCodes.save(new File(InvitationMain.pl.getDataFolder(), "AllCodes.yml"));
         playerData.save(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
     }
@@ -46,7 +46,7 @@ public class DataUpdater {
     public void resetPlayerData(String clearName) throws IOException {
         YamlConfiguration playerData = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
         playerData.set(clearName+".frequency",0);
-        playerData.set(clearName+".inviter","无");
+        playerData.set(clearName+".inviter","none");
         playerData.save(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
     }
 }

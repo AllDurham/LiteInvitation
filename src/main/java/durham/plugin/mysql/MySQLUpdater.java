@@ -10,7 +10,7 @@ public class MySQLUpdater {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = MySQLConnection.tablePrefix;
-        String sql=String.format("INSERT INTO %s_playerdata(`uuid`, `name`, `frequency`, `code`, `inviter`) VALUES('%s', '%s', '%s', '%s', '无')",tablePrefix,uuid,name,0,code);
+        String sql=String.format("INSERT INTO %s_playerdata(`uuid`, `name`, `frequency`, `code`, `inviter`) VALUES('%s', '%s', '%s', '%s', 'none')",tablePrefix,uuid,name,0,code);
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.execute();
         ps.close();
@@ -59,7 +59,7 @@ public class MySQLUpdater {
         String tablePrefix = MySQLConnection.tablePrefix;
         String sql=String.format("UPDATE %s_playerdata SET inviter=?,frequency=? WHERE name='%s';",tablePrefix,clearName);
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1,"无");
+        ps.setString(1,"none");
         ps.setInt(2,0);
         ps.execute();
         ps.close();

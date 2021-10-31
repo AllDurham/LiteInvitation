@@ -45,7 +45,9 @@ public class MySQLTaker {
         ResultSet rs = ps.executeQuery();
         String inviter = "未知错误";
         if(rs.next()) {
-            inviter = rs.getString("inviter");}
+            inviter = rs.getString("inviter");
+            if (inviter.equals("none"))inviter="无";
+        }
         ps.close();
         rs.close();
         return inviter;

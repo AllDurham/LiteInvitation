@@ -59,7 +59,7 @@ public class CommandUtils {
             MySQLChecker mySQLChecker = new MySQLChecker();
             MySQLTaker mySQLTaker = new MySQLTaker();
             MySQLUpdater mySQLUpdater = new MySQLUpdater();
-            if (!mySQLTaker.getInviter(p.getUniqueId()).equals("无")){
+            if (!mySQLTaker.getInviter(p.getUniqueId()).equals("none")){
                 p.sendMessage(InvitationMain.prefix+message.getString("alreadyInvite")
                         .replace("&","§"));
                 return;
@@ -106,7 +106,7 @@ public class CommandUtils {
         else{
             YamlConfiguration playerData = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
             YamlConfiguration allCodes = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "AllCodes.yml"));
-            if (!playerData.getString(p.getName()+".inviter").equals("无")){
+            if (!new DataTaker().getInviter(p.getName()).equals("无")){
                 p.sendMessage(InvitationMain.prefix+message.getString("alreadyInvite")
                         .replace("&","§"));
                 return;
@@ -124,7 +124,6 @@ public class CommandUtils {
             if (!p.hasPermission("LiteInvitation.Bypass")){
                 if (ConditionUtils.CheckCondition(p)) return;
             }
-            Bukkit.getServer().getConsoleSender().sendMessage("调试:"+p.getStatistic(Statistic.PLAY_ONE_TICK));
             String inviterName = allCodes.getString("CodeList."+code);
             DataUpdater dataUpdater = new DataUpdater();
             DataTaker dataTaker = new DataTaker();

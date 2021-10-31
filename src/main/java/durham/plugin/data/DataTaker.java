@@ -16,6 +16,7 @@ public class DataTaker {
     }
     public String getInviter(String name) {
         YamlConfiguration playerData = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "PlayerData.yml"));
+        if (playerData.getString(name+".inviter").equals("none"))return "无";
         return playerData.getString(name+".inviter");
     }
     public boolean getStatus(String ip) {

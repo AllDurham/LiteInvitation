@@ -3,19 +3,35 @@ package durham.plugin.utils;
 import durham.plugin.data.DataTaker;
 import durham.plugin.invitation.InvitationMain;
 import durham.plugin.mysql.MySQLTaker;
+import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.SQLException;
-
 public class ConditionUtils {
+    private static Statistic time;
+    static{
+        for (Statistic statistic:Statistic.values()){
+            if (statistic.toString().equals("PLAY_ONE_MINUTE")|statistic.toString().equals("PLAY_ONE_TICK")){
+                time = statistic;
+                break;
+            }
+            if (time==null){
+                Bukkit.getServer().getConsoleSender().sendMessage(InvitationMain.prefix+"§c枚举获取异常");
+            }
+        }
+    }
     public static boolean CheckCondition(Player p) throws SQLException,IllegalArgumentException{
         YamlConfiguration message = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
         FileConfiguration config = InvitationMain.pl.getConfig();
+        if (config.getBoolean("debug")){
+            System.out.print(time);
+            System.out.print(p.getStatistic(Statistic.KILL_ENTITY));
+            System.out.print(p.getLevel());
+        }
         if (InvitationMain.mySQL){
             if (config.getBoolean("Anti-SmallAccount.IP.Enable")){
                 MySQLTaker mySQLTaker = new MySQLTaker();
@@ -41,7 +57,7 @@ public class ConditionUtils {
         }
         if (config.getBoolean("Anti-SmallAccount.Time.Enable")){
             int ticks = config.getInt("Anti-SmallAccount.Time.Amount")*60*60*20;
-            if (p.getStatistic(Statistic.PLAY_ONE_TICK)<ticks){
+            if (p.getStatistic(time)<ticks){
                 p.sendMessage(InvitationMain.prefix+message.getString("TimeNotEnough")
                         .replace("&","§").replace("%time%",config.getString("Anti-SmallAccount.Time.Amount")));
                 return true;
