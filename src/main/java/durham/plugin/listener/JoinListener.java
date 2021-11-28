@@ -27,8 +27,8 @@ public class JoinListener implements Listener {
                 mySQLUpdater.newPlayerData(p.getUniqueId(),p.getName(),code);
                 tellPlayer(p,code);
             }
-            if (!mySQLChecker.ifContainsIP(p.getAddress().getHostName())){
-                new MySQLUpdater().newIPData(p.getAddress().getHostName());
+            if (!mySQLChecker.ifContainsIP(p.getAddress().getAddress().getHostAddress())){
+                new MySQLUpdater().newIPData(p.getAddress().getAddress().getHostAddress());
             }
         }
         else{
@@ -39,8 +39,8 @@ public class JoinListener implements Listener {
                 dataUpdater.newPlayerData(p,code);
                 tellPlayer(p,code);
             }
-            if (!dataChecker.ifContainsIP(p.getAddress().getHostName())){
-                new DataUpdater().newIPData(p.getAddress().getHostName());
+            if (!dataChecker.ifContainsIP(p.getAddress().getAddress().getHostAddress())){
+                new DataUpdater().newIPData(p.getAddress().getAddress().getHostAddress());
             }
         }
     }

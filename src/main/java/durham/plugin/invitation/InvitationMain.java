@@ -82,7 +82,7 @@ public class InvitationMain extends JavaPlugin{
                 "                                                                 ");
         mySQL = getConfig().getBoolean("mysql.enable",false);
         pl = this;
-        version = "1.4.3-SNAPSHOT";
+        version = "1.4.4-SNAPSHOT";
         prefix = getConfig().getString("prefix").replace("&","§");
     }
     public String getVersion(){
