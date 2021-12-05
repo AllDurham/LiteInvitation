@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class JoinListener implements Listener {
     @EventHandler
@@ -27,7 +28,7 @@ public class JoinListener implements Listener {
                 mySQLUpdater.newPlayerData(p.getUniqueId(),p.getName(),code);
                 tellPlayer(p,code);
             }
-            if (!mySQLChecker.ifContainsIP(p.getAddress().getAddress().getHostAddress())){
+            if (!mySQLChecker.ifContainsIP(Objects.requireNonNull(p.getAddress()).getAddress().getHostAddress())){
                 new MySQLUpdater().newIPData(p.getAddress().getAddress().getHostAddress());
             }
         }
@@ -39,14 +40,14 @@ public class JoinListener implements Listener {
                 dataUpdater.newPlayerData(p,code);
                 tellPlayer(p,code);
             }
-            if (!dataChecker.ifContainsIP(p.getAddress().getAddress().getHostAddress())){
+            if (!dataChecker.ifContainsIP(Objects.requireNonNull(p.getAddress()).getAddress().getHostAddress())){
                 new DataUpdater().newIPData(p.getAddress().getAddress().getHostAddress());
             }
         }
     }
     public void tellPlayer(Player p,String code){
         YamlConfiguration message = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
-        p.sendMessage(InvitationMain.prefix+message.getString("Getting-Code")
+        p.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("Getting-Code"))
                 .replace("&","§").replace("%code%",code).replace("%player%",p.getName()));
     }
 }

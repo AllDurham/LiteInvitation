@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class InvitationMain extends JavaPlugin{
     private String version;
@@ -22,7 +23,7 @@ public class InvitationMain extends JavaPlugin{
     public void onEnable() {
         try {new ConfigurationUpdater().checkConfigUpdate();} catch (IOException e)
         {e.printStackTrace();getServer().getConsoleSender().sendMessage(prefix+"§c配置文件更新时发生了未知错误！");}
-        Bukkit.getPluginCommand("LiteInvitation").setExecutor(new BasicCommand());
+        Objects.requireNonNull(Bukkit.getPluginCommand("LiteInvitation")).setExecutor(new BasicCommand());
         Bukkit.getPluginManager().registerEvents(new JoinListener(),this);
         ConsoleCommandSender c = getServer().getConsoleSender();
         new Metrics(this, 12930);
@@ -82,8 +83,8 @@ public class InvitationMain extends JavaPlugin{
                 "                                                                 ");
         mySQL = getConfig().getBoolean("mysql.enable",false);
         pl = this;
-        version = "1.4.4-SNAPSHOT";
-        prefix = getConfig().getString("prefix").replace("&","§");
+        version = "1.4.5-SNAPSHOT";
+        prefix = Objects.requireNonNull(getConfig().getString("prefix")).replace("&","§");
     }
     public String getVersion(){
         return version;

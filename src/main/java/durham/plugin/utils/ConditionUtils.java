@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.Objects;
+
 public class ConditionUtils {
     private static Statistic time;
     static{
@@ -30,9 +32,9 @@ public class ConditionUtils {
         if (InvitationMain.mySQL){
             if (config.getBoolean("Anti-SmallAccount.IP.Enable")){
                 MySQLTaker mySQLTaker = new MySQLTaker();
-                String status = mySQLTaker.getStatus(p.getAddress().getHostName());
+                String status = mySQLTaker.getStatus(Objects.requireNonNull(p.getAddress()).getAddress().getHostAddress());
                 if (status.equalsIgnoreCase("true")){
-                    p.sendMessage(InvitationMain.prefix+message.getString("alreadySameIP")
+                    p.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("alreadySameIP"))
                             .replace("&","§"));
                     return true;
                 }
@@ -40,10 +42,10 @@ public class ConditionUtils {
         }
         else{
             if (config.getBoolean("Anti-SmallAccount.IP.Enable")){
-                boolean status = new DataTaker().getStatus(p.getAddress().getHostName());
+                boolean status = new DataTaker().getStatus(Objects.requireNonNull(p.getAddress()).getAddress().getHostAddress());
                 if (InvitationMain.pl.getConfig().getBoolean("Anti-SmallAccount")){
                     if (status){
-                        p.sendMessage(InvitationMain.prefix+message.getString("alreadySameIP")
+                        p.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("alreadySameIP"))
                                 .replace("&","§"));
                         return true;
                     }
@@ -53,15 +55,15 @@ public class ConditionUtils {
         if (config.getBoolean("Anti-SmallAccount.Time.Enable")){
             int ticks = config.getInt("Anti-SmallAccount.Time.Amount")*60*60*20;
             if (p.getStatistic(time)<ticks){
-                p.sendMessage(InvitationMain.prefix+message.getString("TimeNotEnough")
-                        .replace("&","§").replace("%time%",config.getString("Anti-SmallAccount.Time.Amount")));
+                p.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("TimeNotEnough"))
+                        .replace("&","§").replace("%time%", Objects.requireNonNull(config.getString("Anti-SmallAccount.Time.Amount"))));
                 return true;
             }
         }
         if (config.getBoolean("Anti-SmallAccount.Level.Enable")){
             if (p.getLevel()<config.getInt("Anti-SmallAccount.Level.Amount")){
-                p.sendMessage(InvitationMain.prefix+message.getString("LevelNotEnough")
-                        .replace("&","§").replace("%level%",config.getString("Anti-SmallAccount.Level.Amount")));
+                p.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("LevelNotEnough"))
+                        .replace("&","§").replace("%level%", Objects.requireNonNull(config.getString("Anti-SmallAccount.Level.Amount"))));
                 return true;
             }
         }
