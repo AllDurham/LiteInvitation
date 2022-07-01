@@ -79,7 +79,7 @@ public class InvitationMain extends JavaPlugin{
         saveResource("message.yml",false);
         mySQL = getConfig().getBoolean("mysql.enable",false);
         pl = this;
-        version = "1.4.7-SNAPSHOT";
+        version = "1.4.8-SNAPSHOT";
         prefix = getConfig().getString("prefix","&8[&aLiteInvitation&8] ").replace("&","§");
         try {new ConfigurationUpdater().checkConfigUpdate();} catch (IOException e)
         {e.printStackTrace();getServer().getConsoleSender().sendMessage(prefix+"§c配置文件更新时发生了未知错误！");}
