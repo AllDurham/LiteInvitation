@@ -7,12 +7,12 @@ import durham.plugin.mysql.MySQLHelper;
 import durham.plugin.updater.ConfigurationUpdater;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class InvitationMain extends JavaPlugin{
     private String version;
@@ -21,55 +21,47 @@ public class InvitationMain extends JavaPlugin{
     public static boolean mySQL;
     @Override
     public void onEnable() {
-        try {new ConfigurationUpdater().checkConfigUpdate();} catch (IOException e)
-        {e.printStackTrace();getServer().getConsoleSender().sendMessage(prefix+"§c配置文件更新时发生了未知错误！");}
-        Objects.requireNonNull(Bukkit.getPluginCommand("LiteInvitation")).setExecutor(new BasicCommand());
-        Bukkit.getPluginManager().registerEvents(new JoinListener(),this);
-        ConsoleCommandSender c = getServer().getConsoleSender();
-        new Metrics(this, 12930);
-        try {loadMySQL();} catch (SQLException e) {e.printStackTrace();}
-        loadPAPI(c);
-        c.sendMessage("§8[]======[§7§lLite Invitation§8]======[]");
-        c.sendMessage("§8| §c信息:");
-        c.sendMessage("§8| §7Enabling");
-        c.sendMessage("§8| §c作者: §7Durham");
-        c.sendMessage("§8| §c版本: §7"+version);
-        c.sendMessage("§8| §c联系我: ");
-        c.sendMessage("§8|   §7QQ: §71664828807");
-        c.sendMessage("§8|   §7MCBBS: §7Durham");
-        c.sendMessage("§8|");
+        loadPlugin();
+        Logger logger = getLogger();
+        logger.info("§8[]======[§7§lLite Invitation§8]======[]");
+        logger.info("§8| §c信息:");
+        logger.info("§8| §7Enabling");
+        logger.info("§8| §c作者: §7Durham");
+        logger.info("§8| §c版本: §7"+version);
+        logger.info("§8| §c联系我: ");
+        logger.info("§8|   §7QQ: §71664828807");
+        logger.info("§8|   §7MCBBS: §7Durham");
+        logger.info("§8|");
         if(mySQL){
-            c.sendMessage("§8| §7#§b数据存储方式: §aMySQL");
+            logger.info("§8| §7#§b数据存储方式: §aMySQL");
         }
         else{
-            c.sendMessage("§8| §7#§b数据存储方式: §aYaml");
+            logger.info("§8| §7#§b数据存储方式: §aYaml");
         }
-        c.sendMessage("§8[]==============================[]");
+        logger.info("§8[]==============================[]");
     }
     @Override
     public void onDisable() {
-        ConsoleCommandSender c = getServer().getConsoleSender();
-        c.sendMessage("§8[]======[§7§lLite Invitation§8]======[]");
-        c.sendMessage("§8| §c信息:");
-        c.sendMessage("§8| §7Disabling");
-        c.sendMessage("§8| §c作者: §7Durham");
-        c.sendMessage("§8| §c版本: §7"+version);
-        c.sendMessage("§8| §c联系我: ");
-        c.sendMessage("§8|   §7QQ: §71664828807");
-        c.sendMessage("§8|   §7MCBBS: §7Durham");
-        c.sendMessage("§8|");
+        Logger logger = getLogger();
+        logger.info("§8[]======[§7§lLite Invitation§8]======[]");
+        logger.info("§8| §c信息:");
+        logger.info("§8| §7Disabling");
+        logger.info("§8| §c作者: §7Durham");
+        logger.info("§8| §c版本: §7"+version);
+        logger.info("§8| §c联系我: ");
+        logger.info("§8|   §7QQ: §71664828807");
+        logger.info("§8|   §7MCBBS: §7Durham");
+        logger.info("§8|");
         if(mySQL){
-            c.sendMessage("§8| §7#§b数据存储方式: §aMySQL");
+            logger.info("§8| §7#§b数据存储方式: §aMySQL");
         }
         else{
-            c.sendMessage("§8| §7#§b数据存储方式: §aYaml");
+            logger.info("§8| §7#§b数据存储方式: §aYaml");
         }
-        c.sendMessage("§8[]==============================[]");
+        logger.info("§8[]==============================[]");
     }
     @Override
     public void onLoad(){
-        saveDefaultConfig();
-        saveResource("message.yml",false);
         getServer().getConsoleSender().sendMessage("\n" +
                 "§8|§7------------------------------------------------------------------§8|\n"+
                 "§8|§b  _      _ _       _____            _ _        _   _             \n" +
@@ -81,10 +73,21 @@ public class InvitationMain extends JavaPlugin{
                 "§8|                                                                    \n"+
                 "§8|§7------------------------------------------------------------------§8|\n"+
                 "                                                                 ");
+    }
+    public void loadPlugin(){
+        saveDefaultConfig();
+        saveResource("message.yml",false);
         mySQL = getConfig().getBoolean("mysql.enable",false);
         pl = this;
-        version = "1.4.5-SNAPSHOT";
-        prefix = Objects.requireNonNull(getConfig().getString("prefix")).replace("&","§");
+        version = "1.4.7-SNAPSHOT";
+        prefix = getConfig().getString("prefix","&8[&aLiteInvitation&8] ").replace("&","§");
+        try {new ConfigurationUpdater().checkConfigUpdate();} catch (IOException e)
+        {e.printStackTrace();getServer().getConsoleSender().sendMessage(prefix+"§c配置文件更新时发生了未知错误！");}
+        Objects.requireNonNull(Bukkit.getPluginCommand("LiteInvitation")).setExecutor(new BasicCommand());
+        Bukkit.getPluginManager().registerEvents(new JoinListener(),this);
+        new Metrics(this, 12930);
+        try {loadMySQL();} catch (SQLException e) {e.printStackTrace();}
+        loadPAPI();
     }
     public String getVersion(){
         return version;
@@ -103,15 +106,15 @@ public class InvitationMain extends JavaPlugin{
             }
         }
     }
-    private void loadPAPI(ConsoleCommandSender c){
+    private void loadPAPI(){
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
-            c.sendMessage(prefix+"§a成功添加前置依赖 PlaceholderAPI");
-            c.sendMessage(prefix+"§aPlaceholderAPI 变量注册成功!");
+            getLogger().info(prefix+"§a成功添加前置依赖 PlaceholderAPI");
+            getLogger().info(prefix+"§aPlaceholderAPI 变量注册成功!");
             new PAPIHook().register();
         }
         else{
-            c.sendMessage(prefix+"§a也许您可以添加PlaceholderAPI插件");
-            c.sendMessage(prefix+"§a本插件支持PAPI变量！");
+            getLogger().info(prefix+"§a也许您可以添加PlaceholderAPI插件");
+            getLogger().info(prefix+"§a本插件支持PAPI变量！");
         }
     }
 }

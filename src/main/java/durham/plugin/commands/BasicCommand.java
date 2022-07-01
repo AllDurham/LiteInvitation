@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 public class BasicCommand implements CommandExecutor {
     @Override
@@ -35,35 +36,38 @@ public class BasicCommand implements CommandExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase("reload")){
-                sender.sendMessage(InvitationMain.prefix+message.getString("SuccessReload").replace("&","§"));
+                sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("SuccessReload")).replace("&","§"));
                 InvitationMain.pl.reloadConfig();
+                InvitationMain.prefix = InvitationMain.pl.getConfig().getString("prefix","&8[&aLiteInvitation&8] ").replace("&","§");
                 return true;
             }
             if (args[0].equalsIgnoreCase("Check")){
                 if (!sender.hasPermission("LiteInvitation.Admin")){
-                    sender.sendMessage(InvitationMain.prefix+message.getString("PermissionError").replace("&","§"));
+                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("PermissionError")).replace("&","§"));
                     return true;
                 }
                 if (args.length != 2){
-                    sender.sendMessage(InvitationMain.prefix+message.getString("CommandError").replace("&","§"));
+                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("CommandError")).replace("&","§"));
                     return true;
                 }
+
+
                 String inputName = args[1];
                 CommandUtils commandUtils = new CommandUtils();
                 try {
                     commandUtils.onCheckCommand(sender,inputName);
                 } catch (SQLException e) {
-                    sender.sendMessage(InvitationMain.prefix+message.getString("UnknownError").replace("&","§"));
+                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("UnknownError")).replace("&","§"));
                 }
                 return true;
             }
             if (args[0].equalsIgnoreCase("Clear")){
                 if (!sender.hasPermission("LiteInvitation.Admin")){
-                    sender.sendMessage(InvitationMain.prefix+message.getString("PermissionError").replace("&","§"));
+                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("PermissionError")).replace("&","§"));
                     return true;
                 }
                 if (args.length != 2){
-                    sender.sendMessage(InvitationMain.prefix+message.getString("CommandError").replace("&","§"));
+                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("CommandError")).replace("&","§"));
                     return true;
                 }
                 String inputName = args[1];
@@ -71,12 +75,12 @@ public class BasicCommand implements CommandExecutor {
                 try {
                     commandUtils.onClearCommand(sender,inputName);
                 } catch (IOException | SQLException e) {
-                    sender.sendMessage(InvitationMain.prefix+message.getString("UnknownError").replace("&","§"));
+                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("UnknownError")).replace("&","§"));
                 }
                 return true;
             }
             if (sender instanceof ConsoleCommandSender){
-                sender.sendMessage(InvitationMain.prefix+message.getString("ConsoleError").replace("&","§"));
+                sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("ConsoleError")).replace("&","§"));
                 return true;
             }
             if (args[0].equalsIgnoreCase("Look")){
@@ -84,13 +88,13 @@ public class BasicCommand implements CommandExecutor {
                 try {
                     commandUtils.onLookCommand((Player)sender);
                 } catch (SQLException e) {
-                    sender.sendMessage(InvitationMain.prefix+message.getString("UnknownError").replace("&","§"));
+                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("UnknownError")).replace("&","§"));
                 }
                 return true;
             }
             if (args[0].equalsIgnoreCase("Accept")){
                 if (args.length != 2){
-                    sender.sendMessage(InvitationMain.prefix+message.getString("CommandError").replace("&","§"));
+                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("CommandError")).replace("&","§"));
                     return true;
                 }
                 String inputCode = args[1];
@@ -98,11 +102,11 @@ public class BasicCommand implements CommandExecutor {
                 try {
                     commandUtils.onAcceptCommand((Player)sender,inputCode);
                 } catch (IOException | SQLException e) {
-                    sender.sendMessage(InvitationMain.prefix+message.getString("UnknownError").replace("&","§"));
+                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("UnknownError")).replace("&","§"));
                 }
                 return true;
             }
-            sender.sendMessage(InvitationMain.prefix+message.getString("CommandError").replace("&","§"));
+            sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("CommandError")).replace("&","§"));
             return true;
         }
         return false;
