@@ -12,7 +12,7 @@ public class DataChecker {
         YamlConfiguration allCodes = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "AllCodes.yml"));
         return allCodes.getStringList("AllCodes").contains(uuid.toString());
     }
-    public boolean ifContainsIP(String ip){
+    public static boolean ifContainsIP(String ip){
         YamlConfiguration ipList = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "IPList.yml"));
         return ipList.contains(ip.replace(".","-"));
     }

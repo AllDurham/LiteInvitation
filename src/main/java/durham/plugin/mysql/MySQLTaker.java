@@ -8,118 +8,147 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 public class MySQLTaker {
-    public int getFrequency(UUID uuid) throws SQLException {
+    public static int getFrequency(UUID uuid) throws SQLException {
+        int frequency = 0;
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = MySQLConnection.tablePrefix;
-        String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `uuid` = '%s'",tablePrefix,uuid);
+        String sql = "SELECT frequency FROM " + tablePrefix + "_playerdata WHERE uuid = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, uuid.toString());
         ResultSet rs = ps.executeQuery();
-        int Frequency = 114514;
-        if(rs.next()) {
-            Frequency = rs.getInt("frequency");}
-        ps.close();
+        if (rs.next()) {
+            frequency = rs.getInt("frequency");
+        }
         rs.close();
-        return Frequency;
+        ps.close();
+        conn.close();
+        return frequency;
     }
-    public String getCode(UUID uuid) throws SQLException {
-        MySQLConnection mySQLConnection = new MySQLConnection();
-        Connection conn = mySQLConnection.getConn();
-        String tablePrefix = MySQLConnection.tablePrefix;
-        String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `uuid` = '%s'",tablePrefix,uuid);
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
+
+    public static String getCode(UUID uuid) throws SQLException {
         String code = "未知错误";
-        if(rs.next()) {
-            code = rs.getString("code");}
-        ps.close();
-        rs.close();
-        return code;
-    }
-    public String getInviter(UUID uuid) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = MySQLConnection.tablePrefix;
-        String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `uuid` = '%s'",tablePrefix,uuid);
+        String sql = "SELECT code FROM " + tablePrefix + "_playerdata WHERE uuid = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, uuid.toString());
         ResultSet rs = ps.executeQuery();
-        String inviter = "未知错误";
-        if(rs.next()) {
-            inviter = rs.getString("inviter");
-            if (inviter.equals("none"))inviter="无";
+        if (rs.next()) {
+            code = rs.getString("code");
         }
         ps.close();
         rs.close();
+        conn.close();
+        return code;
+    }
+
+    public static String getInviter(String uuid) throws SQLException {
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        Connection conn = mySQLConnection.getConn();
+        String tablePrefix = MySQLConnection.tablePrefix;
+        String sql = "SELECT inviter FROM " + tablePrefix + "_playerdata WHERE uuid = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, uuid);
+        ResultSet rs = ps.executeQuery();
+        String inviter = "";
+        if (rs.next()) {
+            inviter = rs.getString("inviter");
+        }
+        ps.close();
+        rs.close();
+        conn.close();
         return inviter;
     }
-    public String getName(String code) throws SQLException {
+
+    public static String getName(String code) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = MySQLConnection.tablePrefix;
-        String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `code` = '%s'",tablePrefix,code);
+        String sql = "SELECT name FROM " + tablePrefix + "_playerdata WHERE code = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, code);
         ResultSet rs = ps.executeQuery();
-        String name = "未知错误";
-        if(rs.next()) {
-            name = rs.getString("name");}
+        String name = "";
+        if (rs.next()) {
+            name = rs.getString("name");
+        }
         ps.close();
         rs.close();
+        conn.close();
         return name;
     }
-    public String getUUID(String code) throws SQLException {
+
+    public static String getUUID(String code) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = MySQLConnection.tablePrefix;
-        String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `code` = '%s'",tablePrefix,code);
+        String sql = "SELECT uuid FROM " + tablePrefix + "_playerdata WHERE code = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, code);
         ResultSet rs = ps.executeQuery();
-        String uuid = null;
-        if(rs.next()) {
-            uuid = rs.getString("uuid");}
+        String uuid = "";
+        if (rs.next()) {
+            uuid = rs.getString("uuid");
+        }
         ps.close();
         rs.close();
+        conn.close();
         return uuid;
     }
-    public String getNameUUID(String name) throws SQLException {
+
+    public static String getUUIDByName(String name) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = MySQLConnection.tablePrefix;
-        String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `name` = '%s'",tablePrefix,name);
+        String sql = "SELECT uuid FROM " + tablePrefix + "_playerdata WHERE name = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, name);
         ResultSet rs = ps.executeQuery();
-        String uuid = null;
-        if(rs.next()) {
-            uuid = rs.getString("uuid");}
+        String uuid = "";
+        if (rs.next()) {
+            uuid = rs.getString("uuid");
+        }
         ps.close();
         rs.close();
+        conn.close();
         return uuid;
     }
-    public int getNameFrequency(String name) throws SQLException {
+
+    public static int getNameFrequency(String name) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = MySQLConnection.tablePrefix;
-        String sql=String.format("SELECT * FROM `%s_playerdata` WHERE `name` = '%s'",tablePrefix,name);
+        String sql = "SELECT frequency FROM " + tablePrefix + "_playerdata WHERE name = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, name);
         ResultSet rs = ps.executeQuery();
-        int Frequency = 114514;
-        if(rs.next()) {
-            Frequency = rs.getInt("frequency");}
+        int frequency = 0;
+        if (rs.next()) {
+            frequency = rs.getInt("frequency");
+        }
         ps.close();
         rs.close();
-        return Frequency;
+        conn.close();
+        return frequency;
     }
-    public String getStatus(String ip) throws SQLException {
+
+    public static boolean getStatus(String ip) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = MySQLConnection.tablePrefix;
-        String sql=String.format("SELECT * FROM `%s_ipdata` WHERE `ip` = '%s'",tablePrefix, ip.replace(".","-"));
+        String sql = "SELECT status FROM " + tablePrefix + "_ipdata WHERE ip = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, ip.replace(".", "-"));
         ResultSet rs = ps.executeQuery();
-        String status = "未知错误";
-        if(rs.next()) {
-            status = rs.getString("status");}
+        boolean status = false;
+        if (rs.next()) {
+            status = rs.getBoolean("status");
+        }
         ps.close();
         rs.close();
         return status;
     }
+
 }

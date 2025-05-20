@@ -6,62 +6,81 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 public class MySQLUpdater {
-    public void newPlayerData(UUID uuid, String name, String code) throws SQLException {
+    public static void newPlayerData(UUID uuid, String name, String code) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = MySQLConnection.tablePrefix;
-        String sql=String.format("INSERT INTO %s_playerdata(`uuid`, `name`, `frequency`, `code`, `inviter`) VALUES('%s', '%s', '%s', '%s', 'none')",tablePrefix,uuid,name,0,code);
+        String sql = "INSERT INTO " + tablePrefix + "_playerdata(`uuid`, `name`, `frequency`, `code`, `inviter`) VALUES(?, ?, 0, ?, '')";
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.execute();
+        ps.setString(1, uuid.toString());
+        ps.setString(2, name);
+        ps.setString(3, code);
+        ps.executeUpdate();
         ps.close();
+        conn.close();
     }
-    public void addFrequency(UUID uuid, int frequency) throws SQLException {
+
+    public static void addFrequency(UUID uuid, int frequency) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = MySQLConnection.tablePrefix;
-        MySQLTaker mySQLTaker = new MySQLTaker();
-        int value = mySQLTaker.getFrequency(uuid);
-        String sql = String.format("UPDATE %s_playerdata SET frequency='%s' WHERE uuid='%s';",tablePrefix,value+frequency,uuid);
+        int value = MySQLTaker.getFrequency(uuid);
+        String sql = "UPDATE " + tablePrefix + "_playerdata SET frequency=? WHERE uuid=?";
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.execute();
+        ps.setInt(1, value + frequency);
+        ps.setString(2, uuid.toString());
+        ps.executeUpdate();
         ps.close();
+        conn.close();
     }
-    public void setInviter(UUID uuid, String inviterName) throws SQLException {
+
+    public static void setInviter(UUID uuid, String inviterName) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = MySQLConnection.tablePrefix;
-        String sql = String.format("UPDATE %s_playerdata SET inviter='%s' WHERE uuid='%s';",tablePrefix,inviterName,uuid);
+        String sql = "UPDATE " + tablePrefix + "_playerdata SET inviter=? WHERE uuid=?";
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.execute();
+        ps.setString(1, inviterName);
+        ps.setString(2, uuid.toString());
+        ps.executeUpdate();
         ps.close();
+        conn.close();
     }
-    public void newIPData(String ip) throws SQLException {
+
+    public static void newIPData(String ip) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = MySQLConnection.tablePrefix;
-        String sql=String.format("INSERT INTO %s_ipdata(`status`,`ip`) VALUES('false', '%s')",tablePrefix,ip.replace(".","-"));
+        String sql = "INSERT INTO " + tablePrefix + "_ipdata(`status`, `ip`) VALUES('false', ?)";
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.execute();
+        ps.setString(1, ip.replace(".", "-"));
+        ps.executeUpdate();
         ps.close();
+        conn.close();
     }
-    public void setStatus(String ip,boolean status) throws SQLException {
+
+    public static void setStatus(String ip, boolean status) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = MySQLConnection.tablePrefix;
-        String sql = String.format("UPDATE %s_ipdata SET status='%s' WHERE ip='%s';",tablePrefix,status,ip.replace(".","-"));
+        String sql = "UPDATE " + tablePrefix + "_ipdata SET status=? WHERE ip=?";
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.execute();
+        ps.setBoolean(1, status);
+        ps.setString(2, ip.replace(".", "-"));
+        ps.executeUpdate();
         ps.close();
+        conn.close();
     }
-    public void resetPlayerData(String clearName) throws SQLException {
+
+    public static void resetPlayerData(String clearName) throws SQLException {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection conn = mySQLConnection.getConn();
         String tablePrefix = MySQLConnection.tablePrefix;
-        String sql=String.format("UPDATE %s_playerdata SET inviter=?,frequency=? WHERE name='%s';",tablePrefix,clearName);
+        String sql = "UPDATE " + tablePrefix + "_playerdata SET inviter='', frequency=0 WHERE name=?";
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1,"none");
-        ps.setInt(2,0);
-        ps.execute();
+        ps.setString(1, clearName);
+        ps.executeUpdate();
         ps.close();
+        conn.close();
     }
 }

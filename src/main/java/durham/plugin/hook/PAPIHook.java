@@ -5,23 +5,21 @@ import durham.plugin.utils.RequestUtils;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.NotNull;
-
 import java.sql.SQLException;
 
 public class PAPIHook extends PlaceholderExpansion {
     @Override
-    public @NotNull String getIdentifier() {
+    public String getIdentifier() {
         return "liteinvitation";
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public String getAuthor() {
         return "Durham";
     }
 
     @Override
-    public @NotNull String getVersion() {
+    public String getVersion() {
         return InvitationMain.pl.getVersion();
     }
 

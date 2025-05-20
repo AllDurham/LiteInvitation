@@ -8,7 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,97 +17,104 @@ import java.util.Objects;
 
 public class BasicCommand implements CommandExecutor {
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
-        if (command.getName().equalsIgnoreCase("LiteInvitation")){
+    public boolean onCommand( CommandSender sender, Command command,  String label, String[] args) {
+        if ("LiteInvitation".equalsIgnoreCase(command.getName())) {
             YamlConfiguration message = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
-            if (args.length==0){
+            if (args.length == 0) {
                 List<String> help = message.getStringList("Help");
                 for (String s : help) {
                     sender.sendMessage(s.replace("&", "§").replace("%prefix%", InvitationMain.prefix));
                 }
                 return true;
             }
-            if (args[0].equalsIgnoreCase("help")){
-                List<String> help = message.getStringList("Help");
-                for (String s : help) {
-                    sender.sendMessage(s.replace("&", "§").replace("%prefix%", InvitationMain.prefix));
+            if ("help".equalsIgnoreCase(args[0])) {
+                List<String> help2 = message.getStringList("Help");
+                for (String s2 : help2) {
+                    sender.sendMessage(s2.replace("&", "§").replace("%prefix%", InvitationMain.prefix));
                 }
                 return true;
             }
-            if (args[0].equalsIgnoreCase("reload")){
-                sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("SuccessReload")).replace("&","§"));
+            if ("reload".equalsIgnoreCase(args[0])) {
+                if (!sender.hasPermission("LiteInvitation.Admin")) {
+                    sender.sendMessage(InvitationMain.prefix + (Objects.requireNonNull(message.getString("PermissionError"))).replace("&", "§"));
+                    return true;
+                }
+                sender.sendMessage(InvitationMain.prefix + Objects.requireNonNull(message.getString("SuccessReload")).replace("&", "§"));
                 InvitationMain.pl.reloadConfig();
-                InvitationMain.prefix = InvitationMain.pl.getConfig().getString("prefix","&8[&aLiteInvitation&8] ").replace("&","§");
+                InvitationMain.mySQL = InvitationMain.pl.getConfig().getBoolean("mysql.enable", false);
+                InvitationMain.prefix = InvitationMain.pl.getConfig().getString("prefix", "&8[&aLiteInvitation&8] ").replace("&", "§");
                 return true;
             }
-            if (args[0].equalsIgnoreCase("Check")){
-                if (!sender.hasPermission("LiteInvitation.Admin")){
-                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("PermissionError")).replace("&","§"));
+            if ("Check".equalsIgnoreCase(args[0])) {
+                if (!sender.hasPermission("LiteInvitation.Admin")) {
+                    sender.sendMessage(InvitationMain.prefix + Objects.requireNonNull(message.getString("PermissionError")).replace("&", "§"));
                     return true;
                 }
-                if (args.length != 2){
-                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("CommandError")).replace("&","§"));
+                if (args.length != 2) {
+                    sender.sendMessage(InvitationMain.prefix + Objects.requireNonNull(message.getString("CommandError")).replace("&", "§"));
                     return true;
                 }
-
-
                 String inputName = args[1];
-                CommandUtils commandUtils = new CommandUtils();
                 try {
-                    commandUtils.onCheckCommand(sender,inputName);
+                    CommandUtils.onCheckCommand(sender, inputName);
+                    return true;
                 } catch (SQLException e) {
-                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("UnknownError")).replace("&","§"));
-                }
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("Clear")){
-                if (!sender.hasPermission("LiteInvitation.Admin")){
-                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("PermissionError")).replace("&","§"));
+                    e.printStackTrace();
+                    sender.sendMessage(InvitationMain.prefix + Objects.requireNonNull(message.getString("UnknownError")).replace("&", "§"));
                     return true;
                 }
-                if (args.length != 2){
-                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("CommandError")).replace("&","§"));
+            }
+            if (args[0].equalsIgnoreCase("Clear")) {
+                if (!sender.hasPermission("LiteInvitation.Admin")) {
+                    sender.sendMessage(InvitationMain.prefix + Objects.requireNonNull(message.getString("PermissionError")).replace("&", "§"));
+                    return true;
+                }
+                if (args.length != 2) {
+                    sender.sendMessage(InvitationMain.prefix + Objects.requireNonNull(message.getString("CommandError")).replace("&", "§"));
                     return true;
                 }
                 String inputName = args[1];
-                CommandUtils commandUtils = new CommandUtils();
                 try {
-                    commandUtils.onClearCommand(sender,inputName);
+                    CommandUtils.onClearCommand(sender, inputName);
+                    return true;
                 } catch (IOException | SQLException e) {
-                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("UnknownError")).replace("&","§"));
+                    sender.sendMessage(InvitationMain.prefix + Objects.requireNonNull(message.getString("UnknownError")).replace("&", "§"));
+                    return true;
                 }
+            }
+            if (sender instanceof ConsoleCommandSender) {
+                sender.sendMessage(InvitationMain.prefix + Objects.requireNonNull(message.getString("ConsoleError")).replace("&", "§"));
                 return true;
             }
-            if (sender instanceof ConsoleCommandSender){
-                sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("ConsoleError")).replace("&","§"));
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("Look")){
-                CommandUtils commandUtils = new CommandUtils();
+            if ("Look".equalsIgnoreCase(args[0])) {
                 try {
-                    commandUtils.onLookCommand((Player)sender);
+                    CommandUtils.onLookCommand((Player) sender);
+                    return true;
                 } catch (SQLException e) {
-                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("UnknownError")).replace("&","§"));
+                    e.printStackTrace();
+                    sender.sendMessage(InvitationMain.prefix + Objects.requireNonNull(message.getString("UnknownError")).replace("&", "§"));
+                    return true;
                 }
-                return true;
             }
-            if (args[0].equalsIgnoreCase("Accept")){
-                if (args.length != 2){
-                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("CommandError")).replace("&","§"));
+            if ("Accept".equalsIgnoreCase(args[0])) {
+                if (args.length != 2) {
+                    sender.sendMessage(InvitationMain.prefix + Objects.requireNonNull(message.getString("CommandError")).replace("&", "§"));
                     return true;
                 }
                 String inputCode = args[1];
-                CommandUtils commandUtils = new CommandUtils();
                 try {
-                    commandUtils.onAcceptCommand((Player)sender,inputCode);
+                    CommandUtils.onAcceptCommand((Player) sender, inputCode);
+                    return true;
                 } catch (IOException | SQLException e) {
-                    sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("UnknownError")).replace("&","§"));
+                    e.printStackTrace();
+                    sender.sendMessage(InvitationMain.prefix + Objects.requireNonNull(message.getString("UnknownError")).replace("&", "§"));
+                    return true;
                 }
-                return true;
             }
-            sender.sendMessage(InvitationMain.prefix+ Objects.requireNonNull(message.getString("CommandError")).replace("&","§"));
+            sender.sendMessage(InvitationMain.prefix + Objects.requireNonNull(message.getString("CommandError")).replace("&", "§"));
             return true;
         }
         return false;
+
     }
 }

@@ -79,10 +79,16 @@ public class InvitationMain extends JavaPlugin{
         saveResource("message.yml",false);
         mySQL = getConfig().getBoolean("mysql.enable",false);
         pl = this;
-        version = "1.4.8-SNAPSHOT";
+        version = "1.5.1-SNAPSHOT";
         prefix = getConfig().getString("prefix","&8[&aLiteInvitation&8] ").replace("&","§");
-        try {new ConfigurationUpdater().checkConfigUpdate();} catch (IOException e)
-        {e.printStackTrace();getServer().getConsoleSender().sendMessage(prefix+"§c配置文件更新时发生了未知错误！");}
+        if (getConfig().getBoolean("update",true)) {
+            try {
+                new ConfigurationUpdater().checkConfigUpdate();
+            } catch (IOException e) {
+                e.printStackTrace();
+                getServer().getConsoleSender().sendMessage(prefix + "§c配置文件更新时发生了未知错误！");
+            }
+        }
         Objects.requireNonNull(Bukkit.getPluginCommand("LiteInvitation")).setExecutor(new BasicCommand());
         Bukkit.getPluginManager().registerEvents(new JoinListener(),this);
         new Metrics(this, 12930);
@@ -95,7 +101,7 @@ public class InvitationMain extends JavaPlugin{
     private void loadMySQL() throws SQLException {
         if (mySQL){
             getServer().getConsoleSender().sendMessage(prefix+"§f尝试访问数据库");
-            MySQLHelper.MySQLInstalled();
+            MySQLHelper.initMysql();
         }
         else{
             getServer().getConsoleSender().sendMessage(prefix+"§f正在使用yaml进行文件存储");

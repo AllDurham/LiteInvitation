@@ -17,7 +17,7 @@ public class MySQLConnection {
         String database = config.getString("mysql.database","minecraft");
         String user = config.getString("mysql.user","root");
         String password = config.getString("mysql.password","123456");
-        String url = "jdbc:mysql://" + host + ":" + port + "/" + database;
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=" + config.getString("mysql.useSSL","false");
         tablePrefix = config.getString("mysql.table","Invitation");
         conn = DriverManager.getConnection(url, user, password);
     }

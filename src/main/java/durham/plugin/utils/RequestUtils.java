@@ -7,34 +7,25 @@ import org.bukkit.OfflinePlayer;
 import java.sql.SQLException;
 
 public class RequestUtils {
-    public String requestCode(OfflinePlayer player) throws SQLException {
-        if (InvitationMain.mySQL){
-            MySQLTaker mySQLTaker = new MySQLTaker();
-            return mySQLTaker.getCode(player.getUniqueId());
+    public static String requestCode(OfflinePlayer player) throws SQLException {
+        if (InvitationMain.mySQL) {
+            return MySQLTaker.getCode(player.getUniqueId());
         }
-        else{
-            DataTaker dataTaker = new DataTaker();
-            return dataTaker.getCode(player.getName());
-        }
+        return DataTaker.getCode(player.getName());
     }
-    public String requestFrequency(OfflinePlayer player) throws SQLException {
-        if (InvitationMain.mySQL){
-            MySQLTaker mySQLTaker = new MySQLTaker();
-            return String.valueOf(mySQLTaker.getFrequency(player.getUniqueId()));
+
+    public static String requestFrequency(OfflinePlayer player) throws SQLException {
+        if (InvitationMain.mySQL) {
+            return String.valueOf(MySQLTaker.getFrequency(player.getUniqueId()));
         }
-        else{
-            DataTaker dataTaker = new DataTaker();
-            return String.valueOf(dataTaker.getFrequency(player.getName()));
-        }
+        return String.valueOf(DataTaker.getFrequency(player.getName()));
     }
-    public String requestInviter(OfflinePlayer player) throws SQLException {
-        if (InvitationMain.mySQL){
-            MySQLTaker mySQLTaker = new MySQLTaker();
-            return mySQLTaker.getInviter(player.getUniqueId());
+
+    public static String requestInviter(OfflinePlayer player) throws SQLException {
+        if (InvitationMain.mySQL) {
+            return MySQLTaker.getInviter(player.getUniqueId().toString());
         }
-        else{
-            DataTaker dataTaker = new DataTaker();
-            return dataTaker.getInviter(player.getName());
-        }
+        return DataTaker.getInviter(player.getName());
     }
+
 }

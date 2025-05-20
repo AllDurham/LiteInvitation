@@ -30,6 +30,15 @@ public class ConfigurationUpdater {
         if (InvitationMain.pl.getConfig().getDouble("version")==1.3){
             configUpdate4();
         }
+        if (InvitationMain.pl.getConfig().getDouble("version")==1.4){
+            configUpdate5();
+        }
+        if (InvitationMain.pl.getConfig().getDouble("version")==1.5){
+            configUpdate6();
+        }
+        if (message.getDouble("version")==1.8){
+            messageUpdate3();
+        }
     }
     private void configUpdate1() throws IOException {
         YamlConfiguration message = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
@@ -108,5 +117,34 @@ public class ConfigurationUpdater {
         InvitationMain.pl.getConfig().set("Anti-SmallAccount.Kills.Enable",null);
         InvitationMain.pl.getConfig().set("Anti-SmallAccount.Kills.Amount",null);
         InvitationMain.pl.saveConfig();
+    }
+    private void configUpdate5() {
+        Bukkit.getServer().getConsoleSender().sendMessage
+                ("\n" + InvitationMain.prefix + "§b系统检测出你当前的插件配置版本已过时\n" + InvitationMain.prefix + "§a正在自动为您更新配置中！");
+        InvitationMain.pl.getConfig().set("version", 1.5);
+        InvitationMain.pl.getConfig().set("update", true);
+        InvitationMain.pl.getConfig().set("player-placeholder", "无");
+        List<String> set = new ArrayList<>();
+        set.add("[msg]%prefix%&e你接受了%inviter%的邀请！");
+        set.add("[msg]%prefix%&e他已经邀请了%inviter_frequency%人了！");
+        set.add("[msg]%prefix%&a所以我奖励你一堆泥土！！ awa");
+        set.add("money give %inviter% 50");
+        set.add("[command]give %player% minecraft:dirt 64");
+        InvitationMain.pl.getConfig().set("Invite-Command", set);
+        InvitationMain.pl.saveConfig();
+    }
+    private void configUpdate6() {
+        Bukkit.getServer().getConsoleSender().sendMessage
+                ("\n" + InvitationMain.prefix + "§b系统检测出你当前的插件配置版本已过时\n" + InvitationMain.prefix + "§a正在自动为您更新配置中！");
+        InvitationMain.pl.getConfig().set("version", 1.6);
+        InvitationMain.pl.getConfig().set("mysql.useSSL", false);
+    }
+    private void messageUpdate3() throws IOException {
+        YamlConfiguration message = YamlConfiguration.loadConfiguration(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
+        Bukkit.getServer().getConsoleSender().sendMessage
+                ("\n"+InvitationMain.prefix+"§b系统检测出你当前的信息文件配置版本已过时\n"+InvitationMain.prefix+"§a正在自动为您更新配置中！");
+        message.set("version",1.9);
+        message.set("InviteEach","&c接受邀请失败，你已经邀请了对方，不能再接受对方的邀请！");
+        message.save(new File(InvitationMain.pl.getDataFolder(), "message.yml"));
     }
 }
